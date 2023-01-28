@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { each, onMount } from "svelte/internal";
+	import type { Pokemon } from "../models/pokemon.model";
+    import { lives, score } from "./store";
 	//export let data:PageData;
 
 	let pokemon : Pokemon = {
@@ -12,8 +14,15 @@
 	let show_name : boolean = false;
 
 	function makeGuess(){
-		console.log(guess.toLowerCase() === pokemon.name)
-		guess = ""
+        if (guess.toLowerCase() === pokemon.name){
+            score.update(score => score + 1),
+            show_name = false;
+            getPokemon()
+        }else{
+            lives.update(lives => lives - 1);
+        }
+
+        guess = ""
 	}
 
 	function giveUp(){
@@ -74,8 +83,8 @@
         justify-content: center;
         align-items: center;
         border: 1px solid black;
-        width: 20vw;
         border-radius: 20px;
+        width:40vw;
         padding: 2vw;
     }
 
@@ -88,7 +97,7 @@
     .buttons{
         margin-top: 3vh;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
         width: 100%;
     }
 
